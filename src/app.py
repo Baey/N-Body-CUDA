@@ -8,7 +8,7 @@ from prettytable import PrettyTable
 from matplotlib.animation import FuncAnimation
 
 from nbody.backends import cpu, cuda
-from nbody.frontends import headless
+from nbody.frontends import headless, matplotlib
 from nbody.helpers import Body
 
 # app = typer.Typer()
@@ -156,12 +156,15 @@ def run(backend_name: str, frontend_name: str, config_file: str | None=None, ste
     if frontend_name == 'headless':
         frontend = headless.Frontend(backend=backend)
     elif frontend_name == 'matplotlib':
-        raise NotImplementedError
+        frontend = matplotlib.Frontend(backend=backend)
     
     bodies = [
-        Body(2e30, [0, 0, 0], [0, 0, 0]),
-        Body(6e24, [1.5e11, 0, 0], [0, 29.78e3, 0]),
-        Body(7e22, [1.5e11 + 3.84e8, 0, 0], [0, 29.78e3 + 1.022e3, 0])
+        # Body(2e30, [0, 0, 0], [0, 0, 0]),
+        Body(2e30, [0, 0, 0], [0, 10.78e3, 0]),
+        Body(2e30, [7.5e10, 0, 0], [0, -35.78e3, 0]),
+        Body(2e30, [-5e10, 0, 0], [0, 45.78e3, 0]),
+        Body(6e24, [1.5e11, 0, 0], [0, 62.78e3, 10.0e3]),
+        Body(7e22, [1.5e11 + 3.84e8, 0, 0], [0, 62.78e3 + 1.022e3, 10.0e3])
     ]
     trajectories = frontend.simulate(bodies, steps)
     frontend.plot_trajectories(trajectories)
@@ -170,4 +173,4 @@ def run(backend_name: str, frontend_name: str, config_file: str | None=None, ste
 if __name__ == "__main__":
     # app()
     logger.level('INFO')
-    run('cpu', 'headless')
+    run('cpu', 'matplotlib')
