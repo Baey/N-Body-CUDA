@@ -6,7 +6,7 @@
 #include <cuda_runtime.h>
 #include "kernel.cuh"
 #include "cuda_utils.cuh"
-#include "nbody_utils.cuh"
+#include "nbody_utils.cuh" 
 
 
 

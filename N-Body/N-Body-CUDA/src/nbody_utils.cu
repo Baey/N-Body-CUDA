@@ -12,18 +12,31 @@ void loadBodiesFromFile(const std::string& filename, double3* p, double3* v, dou
         return;
     }
 
-    double mass, r, x, y, z, vx, vy, vz;
+    std::string line;
     size_t i = 0;
-    while (file >> mass >> r >> x >> y >> z >> vx >> vy >> vz) {
-        if (mass <= 0) {
-            std::cerr << "Invalid mass value: " << mass << std::endl;
+
+    while (std::getline(file, line)) {
+        if (line.empty()) {
             continue;
         }
-        p[i] = make_double3(x, y, z);
-        v[i] = make_double3(vx, vy, vz);
-        m[i] = mass;
-        i++;
+
+        std::istringstream iss(line);
+        double mass, r, x, y, z, vx, vy, vz;
+
+        if (iss >> mass >> r >> x >> y >> z >> vx >> vy >> vz) {
+            if (mass <= 0) {
+                std::cerr << "Invalid mass value: " << mass << std::endl;
+                continue;
+            }
+            p[i] = make_double3(x, y, z);
+            v[i] = make_double3(vx, vy, vz);
+            m[i] = mass;
+            i++;
+        } else {
+            std::cerr << "Malformed line: " << line << std::endl;
+        }
     }
+
     file.close();
 }
 
@@ -35,11 +48,23 @@ size_t getNumBodies(const std::string& filename) {
     }
 
     size_t numBodies = 0;
-    while (!file.eof()) {
-        std::string line;
-        std::getline(file, line);
-        numBodies++;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        if (line.empty()) {
+            continue;
+        }
+
+        std::istringstream iss(line);
+        double mass, r, x, y, z, vx, vy, vz;
+
+        if (iss >> mass >> r >> x >> y >> z >> vx >> vy >> vz) {
+            numBodies++;
+        } else {
+            std::cerr << "Malformed line skipped: " << line << std::endl;
+        }
     }
+
     file.close();
     return numBodies;
 }
