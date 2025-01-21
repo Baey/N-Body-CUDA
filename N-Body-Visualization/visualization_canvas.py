@@ -1,20 +1,25 @@
 import numpy as np
 from vispy import scene, app
 import os
-import argparse
 from utils import read_initial_conditions, read_trajectories
 import seaborn as sns
 import random
 
-# Parse command-line arguments
-parser = argparse.ArgumentParser(description="N-Body Visualization")
-parser.add_argument("initial_conditions", help="Path to the initial conditions file")
-parser.add_argument("trajectories", help="Path to the trajectories file")
-args = parser.parse_args()
+
+# Visualization with VisPy
+input_filename = "initial_conditions.txt"
+trajectory_filename = "trajectories.txt"
+
+# Get the directory of the current script
+script_dir = os.path.dirname(__file__)
+
+# Construct full paths to the input and trajectory files
+input_filepath = os.path.join(script_dir, input_filename)
+trajectory_filepath = os.path.join(script_dir, trajectory_filename)
 
 # Read initial conditions and trajectories
-bodies = read_initial_conditions(args.initial_conditions)
-trajectories = read_trajectories(args.trajectories)
+bodies = read_initial_conditions(input_filepath)
+trajectories = read_trajectories(trajectory_filepath)
 
 # Create VisPy scene
 canvas = scene.SceneCanvas(keys="interactive", bgcolor="black")
